@@ -38,8 +38,26 @@ function torb_create_menu() {
   //create custom sub-menus
   add_submenu_page( 'torb-options', 'About The Tri Orbitals Plugin', 'About', 'manage_options', 'torb-about', 'torb_about_page' );
   add_submenu_page( 'torb-options', 'Help with the Tri Orbitals', 'Help', 'manage_options', 'torb-help', 'torb_help_page' );
-  add_submenu_page( 'torb-options', 'Unstalling the Plugin', 'Uninstall', 'manage_options', 'torb-uninstall', 'torb_uninstall' );
+  add_submenu_page( 'torb-options', 'Unstalling the Plugin', 'Uninstall', 'manage_options', 'torb-uninstall', 'torb_uninstall_page' );
 }
+
+//Creating Details of the menus
+function torb_settings_page(){
+
+}
+
+function torb_about_page() {
+
+}
+
+function torb_help_page() {
+
+}
+
+function torb_uninstall_page() {
+
+}
+
 
 add_action( 'admin_menu', 'torb_create_submenu' );
 
@@ -47,5 +65,9 @@ function torb_create_submenu() {
 
   //create a submenu under Settings
   add_options_page( 'Tri Orbitals Settings', 'Tri Orbital Settings', 'manage_options', 'torb_settings', 'torb_plugin_option_page');
+}
+
+function torb_plugin_option_page() {
+  
 }
 ?>
