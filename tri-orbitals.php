@@ -58,15 +58,6 @@ function torb_help_page() {
 function torb_uninstall_page() {
 
 }
-// Setting Page
-function torb_setting_page() {
-  ?>
-  <div class='wrap'>
-    <h2>Tri Orbitals Settings</h2>
-    <form action="option.php" method='post'></form>
-  </div>
-  <?php 
-}
 
 
 /*****
@@ -76,92 +67,135 @@ function torb_setting_page() {
 *
 * */
 
-// Add Menu for our option page
-add_action( 'admin_menu', 'torb_plugin_add_settings_menu');
+
+/*
+Plugin Name: Settings API example
+Plugin URI: https://example.com/
+Description: A complete and practical example of the WordPress Settings API
+Author: WROX
+Author URI: http://wrox.com
+*/
+
+// Add a menu for our option page
+add_action( 'admin_menu', 'torb_plugin_add_settings_menu' );
 
 function torb_plugin_add_settings_menu() {
 
-  add_options_page( 'Tri Orbitals Settings', 'Torb Settings', 'manage_options', 'torb_plugin', 'torb_plugin_option_page');
-  
-}
+    add_options_page( 'TORB Plugin Settings', 'TORB Settings', 'manage_options',
+        'torb_plugin', 'torb_plugin_option_page' );
 
+}
+        
 // Create the option page
 function torb_plugin_option_page() {
-  ?>
-  <div class="warp">
-      <h2>My Plugin</h2>
-      <form action="option.php" method="post">
-          <?php
-          settings_fields( 'torb_plugin_options' );
-          do_settings_sections( 'torb_plugin' );
-          submit_button( 'Save Changes', 'primary');
-          ?>
-      </form>
-  </div>
-  <?php 
+    ?>
+    <div class="wrap">
+        <h2>My plugin</h2>
+        <form action="options.php" method="post">
+            <?php 
+            do_settings_sections( 'torb_plugin' );
+            settings_fields( 'torb_plugin_options' );
+            submit_button( 'Save Changes', 'primary' );  
+            ?>
+        </form>
+    </div>
+    <?php
 }
-
+        
 // Register and define the settings
-add_action( 'admin_init', 'torb_plugin_admin_init');
+add_action('admin_init', 'torb_plugin_admin_init');
 
 function torb_plugin_admin_init() {
-      $args = array(
-          'type'              => 'string',
-          'sanitize_callback' => 'torb_plugin_validate_options',
-          'default'           => NULL
-      );
+    $args = array(
+        'type'=> 'string', 
+        'sanitize_callback' => 'torb_plugin_validate_options',
+        'default' => NULL
+    );
 
-      // register our settings
-      register_setting( 'torb_plugin_options', 'torb_plugin_options', $args);
-
-      //add a setting section
-      add_settings_section(
-         'torb_plugin_main', 
-         'Tri Orbitals Settings', 
-         'torb_plugin_section_text',
-         'torb_plugin' 
-      );
-
-      //create our setting field for name
-      add_settings_field( 
+    //register our settings
+    register_setting( 'torb_plugin_options', 'torb_plugin_options', $args );
+    
+    //add a settings section
+    add_settings_section( 
+        'torb_plugin_main', 
+        'Tri Orbitals Settings',
+        'torb_plugin_section_text', 
+        'torb_plugin' 
+    );
+    
+    //create our settings field for name
+    add_settings_field( 
         'torb_plugin_name', 
-        'Your Name', 
+        'Your Name',
         'torb_plugin_setting_name', 
         'torb_plugin', 
-        'torb_plugin_main'
-      );
+        'torb_plugin_main' 
+    );
+
+    //favorite color field
+    add_settings_field( 
+      'torb_plugin_color', 
+      'Your Color', 
+      'torb_plugin_favorite_color', 
+      'torb_plugin', 
+      'torb_plugin_main' 
+    );
+
+
+
 }
 
-// Draw the section header 
+// Draw the section header
 function torb_plugin_section_text() {
 
-  echo '<p>Enter you settings here</p>';
+    echo '<p>Enter your settings here.</p>';
 
 }
-
-// Display and fill the name form field
+        
+// Display and fill the Name form field
 function torb_plugin_setting_name() {
 
-  //get option 'text_string' value from the database
-  $option = get_option ( 'torb_plugin_options');
-  $name = $options['name'];
+    // get option 'text_string' value from the database
+    $options = get_option( 'torb_plugin_options' );
+    $name = $options['name'];
+
+    // echo the field
+    echo "<input id='name' name='torb_plugin_options[name]'
+        type='text' value='" . esc_attr( $name ) . "' />";
+
+}
+
+//Display and fill the Name form field
+function torb_plugin_favorite_color() {
+
+  //get option 'text_string' value form database
+  $options = get_option( 'torb_plugin_options' );
+  $color = $options['color'];
 
   //echo the field
-  echo "<input id='name' name='torb_plugin_options[name]'
-  type='text' value'" . esc_attr( $name ) . "' />";
+  echo "<input id='color' name='torb_plugin_options[color]' type='text' value='" . esc_attr( $color ) . "'/>";
+
 }
 
-// Validate user input (we want text and spaces only)
+
+
+
+// Validate user input for name input (we want text and spaces only)
 function torb_plugin_validate_options( $input ) {
 
-  $valid = array();
-  $valid['name'] = preg_replace(
-    '/[^a-zA-Z\s]/',
-    '',
-    $input['name'] );
+    $valid = array();
+    $valid['name'] = preg_replace(
+        '/[^a-zA-Z\s]/',
+        '',
+        $input['name'] );
 
-return $valid;
+    //validate user input for color input (we want text and space only)
+    $valid['color'] = preg_replace(
+      '/[^a-zA-Z\s]/',
+      '',
+      $input['color'] );
+    
+    return $valid;
 
 }
 
-?>
