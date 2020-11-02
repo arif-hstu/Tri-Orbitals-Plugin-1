@@ -142,6 +142,25 @@ function torb_plugin_admin_init() {
       'torb_plugin_main' 
     );
 
+    //favorite holiday field
+    add_settings_field( 
+      'torb_plugin_holiday', 
+      'Favorite Holiday', 
+      'torb_plugin_setting_fav_holiday', 
+      'torb_plugin', 
+      'torb_plugin_main' 
+    );
+
+    //favorite country field
+    add_settings_field( 
+      'torb_plugin_fav_country', 
+      'Your Favorite Country', 
+      'torb_plugin_setting_fav_country', 
+      'torb_plugin', 
+      'torb_plugin_main' 
+    );
+
+
 
 
 }
@@ -180,6 +199,65 @@ function torb_plugin_favorite_color() {
 
 
 
+// Display and fill the Favorite holiday field
+function torb_plugin_setting_fav_holiday() {
+
+  //get option "fav_holiday" value from database
+  $option = get_option( 'torb_plugin_options', [ 'fav_holiday' => 'Eid Ul Adha' ] );
+  $holiday = $option['fav_holiday'];
+
+  //define the select option values for favorite holiday
+  $items = array( 'Eid Ul Adha', 'Eid Ul Fitr', 'The Independence Day' );
+
+  //echo the field
+  echo "<select id='fav_holiday' name='torb_plugin_options[fav_holiday]'>";
+
+  foreach( $items as $item ) {
+
+    // loop through the option values
+    //if saved option matches the option value, select it
+    echo "<option value='" .esc_attr( $item ) . "'
+          ".selected( $holiday, $item, false ) . ">". esc_html( $item ) . 
+          "</option>";
+  
+        }
+
+    echo "</select>";
+
+}
+
+
+
+// Display and select the favorite holiday field
+function torb_plugin_setting_fav_country() {
+
+  //get option from the field
+  $option2 = get_option( 'torb_plugin_options', ['fav_country' => 'Bangladesh'] );
+  $fav_country = $option2['fav_country'];
+
+  //define the array of country 
+  $country_items = ['USA', 'Bangladesh', 'Saudi Arabia', 'UK'];
+
+  //echo the field
+  echo "<select name='torb_plugin_options[fav_country]'  id='fav_country'>";
+
+    foreach( $country_items as $country_item ) {
+
+        //loop through the options
+        //if saved value match the options value, select it 
+        echo "<option value='" . esc_attr( $country_item ) . "'" . 
+        selected( $fav_country, $country_item, false ) . ">" . 
+        esc_html( $country_item ) . 
+        "</option>";
+
+    }
+
+    echo "</select>";
+
+}
+
+
+
 
 // Validate user input for name input (we want text and spaces only)
 function torb_plugin_validate_options( $input ) {
@@ -206,8 +284,14 @@ function torb_plugin_validate_options( $input ) {
           'error' );
 
       }
+
+      //sanitizing the data we receive
+      $valid['fav_holiday'] = sanitize_text_field( $input['fav_holiday'] );
+      $valid['fav_country'] = sanitize_text_field( $input['fav_country'] );
+      
     
     return $valid;
 
 }
+?>
 
