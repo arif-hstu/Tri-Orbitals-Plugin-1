@@ -85,6 +85,7 @@ function torb_plugin_add_settings_menu() {
         'torb_plugin', 'torb_plugin_option_page' );
 
 }
+
         
 // Create the option page
 function torb_plugin_option_page() {
@@ -125,11 +126,11 @@ function torb_plugin_admin_init() {
     
     //create our settings field for name
     add_settings_field( 
-        'torb_plugin_name', 
-        'Your Name',
-        'torb_plugin_setting_name', 
-        'torb_plugin', 
-        'torb_plugin_main' 
+      'torb_plugin_name', 
+      'Your Name',
+      'torb_plugin_setting_name', 
+      'torb_plugin', 
+      'torb_plugin_main' 
     );
 
     //favorite color field
@@ -194,6 +195,17 @@ function torb_plugin_validate_options( $input ) {
       '/[^a-zA-Z\s]/',
       '',
       $input['color'] );
+      
+      //adding error notice
+      if( $valid['color'] !== $input['color'] || $valid['name'] !== $input['name']) {
+
+        add_settings_error( 
+          'torb_plugin_text_string', 
+          'torb_plugin_texterror', 
+          'Incorrect value entered!', 
+          'error' );
+
+      }
     
     return $valid;
 
