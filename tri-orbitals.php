@@ -38,6 +38,7 @@ function torb_create_menu() {
   //create custom sub-menus
   add_submenu_page( 'torb-options', 'About The Tri Orbitals Plugin', 'About', 'manage_options', 'torb-about', 'torb_about_page' );
   add_submenu_page( 'torb-options', 'Help with the Tri Orbitals', 'Help', 'manage_options', 'torb-help', 'torb_help_page' );
+  add_submenu_page( 'torb-options', 'Settings of Tri Orbitals', 'Setting', 'manage_options', 'torb-setting', 'torb_setting_page' );
   add_submenu_page( 'torb-options', 'Unstalling the Plugin', 'Uninstall', 'manage_options', 'torb-uninstall', 'torb_uninstall_page' );
 }
 
@@ -57,17 +58,110 @@ function torb_help_page() {
 function torb_uninstall_page() {
 
 }
-
-
-add_action( 'admin_menu', 'torb_create_submenu' );
-
-function torb_create_submenu() {
-
-  //create a submenu under Settings
-  add_options_page( 'Tri Orbitals Settings', 'Tri Orbital Settings', 'manage_options', 'torb_settings', 'torb_plugin_option_page');
+// Setting Page
+function torb_setting_page() {
+  ?>
+  <div class='wrap'>
+    <h2>Tri Orbitals Settings</h2>
+    <form action="option.php" method='post'></form>
+  </div>
+  <?php 
 }
 
-function torb_plugin_option_page() {
+
+/*****
+* Setting API example 
+*
+* Complete Practical example is below
+*
+* */
+
+// Add Menu for our option page
+add_action( 'admin_menu', 'torb_plugin_add_settings_menu');
+
+function torb_plugin_add_settings_menu() {
+
+  add_options_page( 'Tri Orbitals Settings', 'Torb Settings', 'manage_options', 'torb_plugin', 'torb_plugin_option_page');
   
 }
+
+// Create the option page
+function torb_plugin_option_page() {
+  ?>
+  <div class="warp">
+      <h2>My Plugin</h2>
+      <form action="option.php" method="post">
+          <?php
+          settings_fields( 'torb_plugin_options' );
+          do_settings_sections( 'torb_plugin' );
+          submit_button( 'Save Changes', 'primary');
+          ?>
+      </form>
+  </div>
+  <?php 
+}
+
+// Register and define the settings
+add_action( 'admin_init', 'torb_plugin_admin_init');
+
+function torb_plugin_admin_init() {
+      $args = array(
+          'type'              => 'string',
+          'sanitize_callback' => 'torb_plugin_validate_options',
+          'default'           => NULL
+      );
+
+      // register our settings
+      register_setting( 'torb_plugin_options', 'torb_plugin_options', $args);
+
+      //add a setting section
+      add_settings_section(
+         'torb_plugin_main', 
+         'Tri Orbitals Settings', 
+         'torb_plugin_section_text',
+         'torb_plugin' 
+      );
+
+      //create our setting field for name
+      add_settings_field( 
+        'torb_plugin_name', 
+        'Your Name', 
+        'torb_plugin_setting_name', 
+        'torb_plugin', 
+        'torb_plugin_main'
+      );
+}
+
+// Draw the section header 
+function torb_plugin_section_text() {
+
+  echo '<p>Enter you settings here</p>';
+
+}
+
+// Display and fill the name form field
+function torb_plugin_setting_name() {
+
+  //get option 'text_string' value from the database
+  $option = get_option ( 'torb_plugin_options');
+  $name = $options['name'];
+
+  //echo the field
+  echo "<input id='name' name='torb_plugin_options[name]'
+  type='text' value'" . esc_attr( $name ) . "' />";
+}
+
+// Validate user input (we want text and spaces only)
+function torb_plugin_validate_options( $input ) {
+
+  $valid = array();
+  $valid['name'] = preg_replace(
+    '/[^a-zA-Z\s]/',
+    '',
+    $input['name'] );
+
+return $valid;
+
+}
+
 ?>
