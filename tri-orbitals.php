@@ -119,13 +119,7 @@ function torb_plugin_admin_init() {
     // Adding a Section to an Existing Page
     register_setting( 'reading', 'torb_plugin_options', $args );
 
-    //adding a section under Reading Page under Main setting
-    add_settings_section( 
-      'torb_plugin_options', 
-      'Tri Orbitals Settings', 
-      'torb_plugin_section_text', 
-      'reading' 
-    );
+
         
     //add a settings section
     add_settings_section( 
@@ -175,9 +169,9 @@ function torb_plugin_admin_init() {
     add_settings_field( 
       'torb_plugin_text_string', 
       'Your Name', 
-      'torb_plugin_setting_tame', 
+      'torb_plugin_setting_name', 
       'reading', 
-      'torb_plugin_options'
+      'default'
     );
 
 
