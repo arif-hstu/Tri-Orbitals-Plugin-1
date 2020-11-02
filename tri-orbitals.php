@@ -44,8 +44,44 @@ function torb_create_menu() {
 
 //Creating Details of the menus
 function torb_settings_page(){
+?>
+    <div class="notice notice-error is-dismissible">
+    <p>There has been an error.</p>
+    </div>
+    <div class="notice notice-warning is-dismissible">
+    <p>This is a warning message.</p>
+    </div>
+    <div class="notice notice-success is-dismissible">
+    <p>This is a success message.</p>
+    </div>
+    <div class="notice notice-info is-dismissible">
+    <p>This is some information.</p>
+    </div>
+
+    <p>
+    <input type="submit" name="Save" value="Save Options"/>
+    <input type="submit" name="Save" value="Save Options"
+    class="button-primary"/>
+    </p><p>
+    <input type="submit" name="Secondary" value="Secondary Button"/>
+    <input type="submit" name="Secondary" value="Secondary Button"
+    class="button-secondary"/>
+    </p>
+
+    <div class="tablenav">
+    <div class="tablenav-pages">
+    <span class="displaying-num">Displaying 1-20 of 69</span>
+    <span class="page-numbers current">1</span>
+    <a href="#" class="page-numbers">2</a>
+    <a href="#" class="page-numbers">3</a>
+    <a href="#" class="page-numbers">4</a>
+    <a href="#" class="next page-numbers">&raquo;</a>
+    </div>
+    </div>
+    <?php 
 
 }
+
 
 function torb_about_page() {
 
@@ -173,8 +209,6 @@ function torb_plugin_admin_init() {
       'reading', 
       'default'
     );
-
-
 
 
 }
