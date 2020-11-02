@@ -115,7 +115,18 @@ function torb_plugin_admin_init() {
 
     //register our settings
     register_setting( 'torb_plugin_options', 'torb_plugin_options', $args );
-    
+
+    // Adding a Section to an Existing Page
+    register_setting( 'reading', 'torb_plugin_options', $args );
+
+    //adding a section under Reading Page under Main setting
+    add_settings_section( 
+      'torb_plugin_options', 
+      'Tri Orbitals Settings', 
+      'torb_plugin_section_text', 
+      'reading' 
+    );
+        
     //add a settings section
     add_settings_section( 
         'torb_plugin_main', 
@@ -158,6 +169,15 @@ function torb_plugin_admin_init() {
       'torb_plugin_setting_fav_country', 
       'torb_plugin', 
       'torb_plugin_main' 
+    );
+
+    //add our field under reading page
+    add_settings_field( 
+      'torb_plugin_text_string', 
+      'Your Name', 
+      'torb_plugin_setting_tame', 
+      'reading', 
+      'torb_plugin_options'
     );
 
 
@@ -293,5 +313,9 @@ function torb_plugin_validate_options( $input ) {
     return $valid;
 
 }
+
+
+
+
 ?>
 
